@@ -4,296 +4,411 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
 <title>Aashvik's 1st Birthday 🐨</title>
-
-<!-- WhatsApp / Social preview tags -->
 <meta property="og:title" content="🐨 Aashvik's 1st Birthday Party!">
 <meta property="og:description" content="Join us on Saturday, 18th April 2026 · 5:30–8:30 PM · Bertha-Benz-Karree 161, Köln 🎂">
 <meta property="og:type" content="website">
-<meta name="theme-color" content="#2e8b57">
-
-<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@400;600;800&family=Quicksand:wght@500;600;700&display=swap" rel="stylesheet">
-
+<meta name="theme-color" content="#1a4a2e">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Quicksand:wght@500;600;700&display=swap" rel="stylesheet">
 <style>
-  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  /* ═══════════════════════════════════════
+     🎨 THEME PALETTE — 4 colours only
+     --forest  : #1a4a2e  (deep green)
+     --sage    : #e8f2eb  (pale sage)
+     --cream   : #faf7f0  (warm cream)
+     --gold    : #c9a84c  (muted gold)
+  ═══════════════════════════════════════ */
+
+  :root {
+    --forest : #1a4a2e;
+    --forest2 : #255c3a;
+    --sage   : #e8f2eb;
+    --cream  : #faf7f0;
+    --gold   : #c9a84c;
+    --gold-lt: #f0dfa0;
+    --ink    : #1a4a2e;
+    --muted  : #6b8f76;
+  }
+
+  * { margin:0; padding:0; box-sizing:border-box; }
 
   body {
-    background: linear-gradient(160deg, #b2dfb4 0%, #c8e6c9 55%, #a5d6a7 100%);
+    background: var(--sage);
     min-height: 100vh;
     font-family: 'Quicksand', sans-serif;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding: 24px 12px 40px;
+    display: flex; flex-direction: column; align-items: center;
+    padding: 28px 12px 48px;
+    overflow-x: hidden;
   }
 
-  /* ── CONFETTI ── */
-  .confetti-wrap {
-    position: fixed; inset: 0;
-    pointer-events: none; overflow: hidden; z-index: 0;
-  }
-  .cp {
-    position: absolute; border-radius: 2px;
-    animation: fall linear infinite; opacity: 0;
-  }
-  @keyframes fall {
-    0%  { transform: translateY(-20px) rotate(0deg);   opacity: 0.9; }
-    100%{ transform: translateY(100vh) rotate(720deg); opacity: 0;   }
-  }
-
-  /* ── CARD ── */
-  .card {
-    width: 100%; max-width: 520px;
-    background: #fffdf7;
-    border-radius: 40px;
-    overflow: hidden;
-    box-shadow: 0 24px 72px rgba(30,82,53,0.22), 0 4px 14px rgba(0,0,0,0.06);
-    position: relative; z-index: 1;
-    animation: riseUp 0.8s cubic-bezier(.22,1,.36,1) both;
-  }
-  @keyframes riseUp {
-    from { opacity: 0; transform: translateY(40px) scale(0.97); }
-    to   { opacity: 1; transform: translateY(0)    scale(1);    }
-  }
-
-  /* ── HEADER ── */
-  .header {
-    background: linear-gradient(148deg, #2e8b57 0%, #236645 55%, #1a5235 100%);
-    padding: 40px 32px 84px;
-    position: relative; overflow: hidden; text-align: center;
-  }
-
-  /* shimmer sweep */
-  .header::before {
+  /* ── floating background leaves (decoration only) ── */
+  body::before {
     content: '';
-    position: absolute; inset: 0;
-    background: linear-gradient(110deg, transparent 38%, rgba(255,255,255,0.09) 50%, transparent 62%);
-    animation: sweep 3.5s ease-in-out infinite;
+    position: fixed; inset: 0;
+    background-image:
+      radial-gradient(circle at 10% 20%, rgba(26,74,46,0.06) 0%, transparent 50%),
+      radial-gradient(circle at 90% 80%, rgba(26,74,46,0.06) 0%, transparent 50%);
+    pointer-events: none; z-index: 0;
+  }
+
+  /* ════════════════════════════════
+     🎈 BALLOONS
+  ════════════════════════════════ */
+  .balloon-wrap { position:fixed; inset:0; pointer-events:none; overflow:hidden; z-index:0; }
+  .balloon { position:absolute; animation:balloonRise linear infinite; opacity:0; }
+  @keyframes balloonRise {
+    0%   { transform:translateY(110vh) rotate(-6deg); opacity:0;   }
+    6%   { opacity:.7; }
+    50%  { transform:translateY(48vh)  rotate(6deg);  opacity:.65; }
+    94%  { opacity:.5; }
+    100% { transform:translateY(-8vh)  rotate(-3deg); opacity:0;   }
+  }
+
+  /* ════════════════════════════════
+     🎊 CONFETTI — forest palette
+  ════════════════════════════════ */
+  .confetti-wrap { position:fixed; inset:0; pointer-events:none; overflow:hidden; z-index:0; }
+  .cp { position:absolute; animation:fall linear infinite; opacity:0; }
+  @keyframes fall {
+    0%   { transform:translateY(-20px) rotate(0deg);   opacity:.8; }
+    100% { transform:translateY(100vh) rotate(540deg); opacity:0;  }
+  }
+
+  /* ════════════════════════════════
+     CARD
+  ════════════════════════════════ */
+  .card {
+    width:100%; max-width:500px;
+    background: var(--cream);
+    border-radius: 36px;
+    overflow: hidden;
+    box-shadow:
+      0 32px 80px rgba(26,74,46,0.18),
+      0 2px 0px rgba(201,168,76,0.4),  /* subtle gold rim */
+      inset 0 0 0 1.5px rgba(201,168,76,0.2);
+    position:relative; z-index:1;
+    animation: cardIn .9s cubic-bezier(.22,1,.36,1) both;
+  }
+  @keyframes cardIn {
+    from { opacity:0; transform:translateY(36px) scale(.97); }
+    to   { opacity:1; transform:translateY(0)    scale(1);   }
+  }
+
+  /* ════════════════════════════════
+     HEADER
+  ════════════════════════════════ */
+  .header {
+    background: var(--forest);
+    padding: 44px 32px 92px;
+    position:relative; overflow:hidden; text-align:center;
+  }
+
+  /* gold top border line */
+  .header::after {
+    content:'';
+    position:absolute; top:0; left:0; right:0;
+    height:3px;
+    background: linear-gradient(90deg, transparent, var(--gold), transparent);
+  }
+
+  /* subtle dot texture */
+  .dots {
+    position:absolute; inset:0;
+    background-image: radial-gradient(circle, rgba(255,255,255,0.04) 1.5px, transparent 1.5px);
+    background-size: 18px 18px;
+  }
+
+  /* shimmer */
+  .shimmer {
+    position:absolute; inset:0;
+    background: linear-gradient(110deg, transparent 38%, rgba(201,168,76,0.07) 50%, transparent 62%);
+    animation: sweep 4s ease-in-out infinite;
   }
   @keyframes sweep { 0%{transform:translateX(-130%)} 100%{transform:translateX(210%)} }
 
-  /* dot texture */
-  .dots {
-    position: absolute; inset: 0;
-    background-image: radial-gradient(circle, rgba(255,255,255,0.08) 2px, transparent 2px);
-    background-size: 20px 20px;
-  }
-
-  /* white curve */
+  /* white-cream curve at bottom */
   .curve {
-    position: absolute; bottom: -1px; left: 0; right: 0;
-    height: 54px; background: #fffdf7;
-    border-radius: 55% 55% 0 0;
+    position:absolute; bottom:-1px; left:0; right:0;
+    height:52px; background:var(--cream);
+    border-radius:52% 52% 0 0;
   }
 
   /* leaves */
-  .lf { position: absolute; font-size: 32px; opacity: 0.3; }
-  .lf1 { top: 12px; left: 16px; animation: sway 3.2s ease-in-out infinite alternate; }
-  .lf2 { top: 8px;  right: 20px; animation: sway 2.8s ease-in-out infinite alternate-reverse; }
-  .lf3 { top: 52px; left: 50%; animation: sway 3.6s ease-in-out infinite alternate; }
-  .lf4 { bottom: 62px; left: 12px; font-size: 22px; animation: sway 2.5s ease-in-out infinite alternate-reverse; }
-  .lf5 { bottom: 58px; right: 14px; font-size: 22px; animation: sway 3s ease-in-out infinite alternate; }
+  .lf { position:absolute; font-size:30px; opacity:0.18; }
+  .lf1 { top:14px; left:18px;   animation: sway 3.4s ease-in-out infinite alternate; }
+  .lf2 { top:10px; right:22px;  animation: sway 2.9s ease-in-out infinite alternate-reverse; }
+  .lf3 { top:56px; left:48%;    animation: sway 3.8s ease-in-out infinite alternate; }
+  .lf4 { bottom:68px; left:14px; font-size:20px; animation: sway 2.6s ease-in-out infinite alternate-reverse; }
+  .lf5 { bottom:64px; right:16px; font-size:20px; animation: sway 3.1s ease-in-out infinite alternate; }
   @keyframes sway { from{transform:rotate(-10deg)} to{transform:rotate(10deg)} }
 
   .invited-tag {
-    display: inline-block;
-    background: rgba(255,255,255,0.15);
-    border: 1.5px solid rgba(255,255,255,0.3);
-    border-radius: 28px;
+    display:inline-block;
+    border: 1.5px solid rgba(201,168,76,0.5);
+    background: rgba(201,168,76,0.12);
+    border-radius:24px;
     padding: 5px 18px;
-    font-size: 11px; font-weight: 700;
-    color: #c5f0d2; letter-spacing: 2.5px;
-    text-transform: uppercase;
-    margin-bottom: 14px; position: relative;
-    animation: fadeDown 0.7s ease 0.2s both;
+    font-size:10.5px; font-weight:700;
+    color: var(--gold-lt);
+    letter-spacing:3px; text-transform:uppercase;
+    margin-bottom:16px; position:relative;
+    animation: fadeDown .7s ease .15s both;
   }
-  @keyframes fadeDown { from{opacity:0;transform:translateY(-14px)} to{opacity:1;transform:translateY(0)} }
+  @keyframes fadeDown { from{opacity:0;transform:translateY(-12px)} to{opacity:1;transform:translateY(0)} }
 
+  /* ── 🎵 Pulsing "1" ── */
   .big-one {
-    font-family: 'Baloo 2', cursive;
-    font-size: clamp(72px, 18vw, 96px);
-    font-weight: 800; color: #fff; line-height: 1;
-    text-shadow: 0 6px 24px rgba(0,0,0,0.18);
-    display: flex; align-items: flex-start;
-    justify-content: center; gap: 2px;
-    position: relative;
-    animation: popIn 0.9s cubic-bezier(.22,1,.36,1) 0.1s both;
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(76px, 19vw, 100px);
+    font-weight:900; color:var(--cream); line-height:1;
+    text-shadow: 0 4px 20px rgba(0,0,0,0.25);
+    display:flex; align-items:flex-start; justify-content:center; gap:2px;
+    position:relative;
+    animation: popIn .9s cubic-bezier(.22,1,.36,1) .1s both;
   }
-  @keyframes popIn { from{opacity:0;transform:scale(0.7)} to{opacity:1;transform:scale(1)} }
-  .big-one .num  { color: #ffd166; }
-  .big-one .sup  { font-size: clamp(32px, 8vw, 40px); margin-top: 14px; color: #ffeaa0; }
-  .big-one .bday { font-size: clamp(32px, 8vw, 40px); margin-top: 26px; color: rgba(255,255,255,0.92); }
+  @keyframes popIn { from{opacity:0;transform:scale(.72)} to{opacity:1;transform:scale(1)} }
+  .big-one .num {
+    color: var(--gold);
+    display:inline-block;
+    animation: numPulse 2s ease-in-out infinite;
+    transform-origin: center bottom;
+  }
+  @keyframes numPulse {
+    0%,100% { transform:scale(1) translateY(0);    text-shadow:0 0 0 var(--gold); }
+    35%     { transform:scale(1.07) translateY(-5px); text-shadow:0 0 24px rgba(201,168,76,0.65); }
+    65%     { transform:scale(.97) translateY(1px);  text-shadow:0 0 0 var(--gold); }
+  }
+  .big-one .sup  { font-size:clamp(30px,7.5vw,38px); margin-top:14px; color:rgba(250,247,240,0.7); }
+  .big-one .bday { font-size:clamp(30px,7.5vw,38px); margin-top:26px; color:rgba(250,247,240,0.88); }
 
+  /* ── 🐨 Koala waving paw ── */
+  .koala-wrap {
+    position:absolute; bottom:-50px; left:50%;
+    transform:translateX(-50%); z-index:10;
+  }
   .koala-badge {
-    position: absolute; bottom: -48px; left: 50%;
-    transform: translateX(-50%);
-    z-index: 10;
-    width: 100px; height: 100px;
-    border-radius: 50%;
-    background: #fffdf7; border: 4px solid #b8e6c0;
-    display: flex; align-items: center; justify-content: center;
-    font-size: 58px;
-    box-shadow: 0 10px 32px rgba(26,82,53,0.22);
-    animation: bob 2.2s ease-in-out infinite;
+    width:100px; height:100px; border-radius:50%;
+    background:var(--cream);
+    border: 3px solid var(--gold);
+    display:flex; align-items:center; justify-content:center;
+    font-size:56px;
+    box-shadow: 0 8px 28px rgba(26,74,46,0.22), 0 0 0 6px rgba(201,168,76,0.12);
+    animation: bob 2.4s ease-in-out infinite;
+    position:relative;
   }
   @keyframes bob {
-    0%,100%{ transform: translateX(-50%) translateY(0);  }
-    50%    { transform: translateX(-50%) translateY(-9px); }
+    0%,100%{ transform:translateY(0); }
+    50%    { transform:translateY(-8px); }
+  }
+  .koala-paw {
+    position:absolute; top:-4px; right:-10px;
+    font-size:20px;
+    transform-origin:bottom left;
+    animation:wave 1.5s ease-in-out infinite;
+  }
+  @keyframes wave {
+    0%,100%{ transform:rotate(0deg); }
+    20%    { transform:rotate(26deg); }
+    40%    { transform:rotate(-8deg); }
+    60%    { transform:rotate(20deg); }
+    80%    { transform:rotate(-4deg); }
   }
 
-  /* ── BODY ── */
+  /* ════════════════════════════════
+     BODY
+  ════════════════════════════════ */
   .body {
     padding: 68px 28px 28px;
-    display: flex; flex-direction: column; align-items: center;
+    display:flex; flex-direction:column; align-items:center;
   }
 
   .name {
-    font-family: 'Baloo 2', cursive;
-    font-size: clamp(32px, 8vw, 44px);
-    font-weight: 800; color: #1a5235;
-    text-align: center; line-height: 1.1;
-    margin-bottom: 4px;
-    animation: fadeUp 0.7s ease 0.4s both;
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(28px, 7.5vw, 40px);
+    font-weight:900; color:var(--forest);
+    text-align:center; line-height:1.15; margin-bottom:4px;
+    animation: fadeUp .7s ease .4s both;
   }
   @keyframes fadeUp { from{opacity:0;transform:translateY(14px)} to{opacity:1;transform:translateY(0)} }
 
   .tagline {
-    font-size: 12px; color: #62a876;
-    font-weight: 700; letter-spacing: 2px;
-    text-transform: uppercase; margin-bottom: 20px;
-    animation: fadeUp 0.7s ease 0.5s both;
+    font-size:11px; color:var(--muted);
+    font-weight:700; letter-spacing:2.5px;
+    text-transform:uppercase; margin-bottom:20px;
+    animation:fadeUp .7s ease .5s both;
   }
 
+  /* gold divider */
   .divider {
-    display: flex; align-items: center; gap: 10px;
-    width: 100%; max-width: 380px; margin-bottom: 18px;
+    display:flex; align-items:center; gap:10px;
+    width:100%; max-width:360px; margin-bottom:18px;
   }
-  .div-line { flex: 1; height: 1.5px; background: linear-gradient(to right, transparent, #c0e8cc, transparent); }
-  .div-icon { font-size: 16px; }
+  .div-line { flex:1; height:1px; background:linear-gradient(to right, transparent, var(--gold), transparent); }
+  .div-icon { font-size:14px; }
 
   .invite-msg {
-    font-size: 15px; color: #3d7050;
-    text-align: center; line-height: 1.85;
-    font-weight: 600; margin-bottom: 22px;
-    max-width: 380px;
-    animation: fadeUp 0.7s ease 0.6s both;
+    font-size:14.5px; color:var(--forest);
+    text-align:center; line-height:1.9;
+    font-weight:600; margin-bottom:22px; max-width:360px;
+    animation:fadeUp .7s ease .6s both;
+    opacity:.85;
+  }
+
+  /* ── 🎂 Cake with flickering candle ── */
+  .cake-wrap {
+    display:flex; align-items:flex-end; justify-content:center;
+    margin-bottom:22px; position:relative;
+  }
+  .cake-emoji {
+    font-size:50px;
+    animation: cakeWobble 3.2s ease-in-out infinite;
+  }
+  @keyframes cakeWobble {
+    0%,100%{ transform:rotate(0deg) scale(1); }
+    25%    { transform:rotate(-2.5deg) scale(1.04); }
+    75%    { transform:rotate(2.5deg)  scale(1.04); }
+  }
+  .candle-flame {
+    position:absolute; top:-2px; left:50%;
+    font-size:13px;
+    animation: flicker .45s ease-in-out infinite alternate;
+  }
+  @keyframes flicker {
+    0%  { transform:translateX(-48%) scale(1)    rotate(-4deg); filter:drop-shadow(0 0 5px #c9a84c); }
+    40% { transform:translateX(-52%) scale(1.18) rotate( 5deg); filter:drop-shadow(0 0 9px #c9a84c); }
+    70% { transform:translateX(-46%) scale(.88)  rotate(-6deg); filter:drop-shadow(0 0 4px #c9a84c); }
+    100%{ transform:translateX(-50%) scale(1.1)  rotate( 2deg); filter:drop-shadow(0 0 12px #c9a84c); }
   }
 
   /* ── DETAIL CARDS ── */
   .details {
-    display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
-    gap: 10px; width: 100%; margin-bottom: 20px;
+    display:grid; grid-template-columns:1fr 1fr 1fr;
+    gap:9px; width:100%; margin-bottom:20px;
   }
   .db {
-    background: linear-gradient(145deg, #f0faf3, #e2f5e8);
-    border: 1.5px solid #b8e4c4;
-    border-radius: 18px; padding: 14px 8px; text-align: center;
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    background: var(--sage);
+    border: 1.5px solid rgba(26,74,46,0.12);
+    border-radius:16px; padding:13px 8px; text-align:center;
+    transition:transform .2s ease, box-shadow .2s ease;
   }
-  .db:hover { transform: translateY(-3px); box-shadow: 0 8px 20px rgba(26,82,53,0.12); }
-  .db.wide { grid-column: 1 / -1; }
-  .di { font-size: 22px; margin-bottom: 4px; }
-  .dl { font-size: 9px; letter-spacing: 2px; text-transform: uppercase; color: #88bea0; font-weight: 700; margin-bottom: 3px; }
-  .dv { font-size: 12.5px; font-weight: 800; color: #1a5235; line-height: 1.3; }
-  .ds { font-size: 10.5px; color: #62a876; font-weight: 600; margin-top: 2px; }
+  .db:hover { transform:translateY(-2px); box-shadow:0 6px 18px rgba(26,74,46,0.1); }
+  .db.wide  { grid-column:1/-1; }
+  .di { font-size:20px; margin-bottom:4px; }
+  .dl { font-size:8.5px; letter-spacing:2px; text-transform:uppercase; color:var(--muted); font-weight:700; margin-bottom:3px; }
+  .dv { font-size:12px; font-weight:800; color:var(--forest); line-height:1.3; }
+  .ds { font-size:10px; color:var(--muted); font-weight:600; margin-top:2px; }
+
+  /* gold separator above transport */
+  .gold-rule {
+    width:100%; height:1px;
+    background:linear-gradient(to right, transparent, var(--gold), transparent);
+    margin-bottom:18px;
+    opacity:.5;
+  }
 
   /* ── TRANSPORT ── */
   .section-title {
-    font-family: 'Baloo 2', cursive;
-    font-size: 14px; font-weight: 800; color: #1a5235;
-    margin-bottom: 10px; align-self: flex-start;
-    display: flex; align-items: center; gap: 6px;
+    font-family:'Playfair Display', serif;
+    font-size:14px; font-weight:700; color:var(--forest);
+    margin-bottom:10px; align-self:flex-start;
+    display:flex; align-items:center; gap:7px;
+    letter-spacing:.3px;
   }
-
   .transport-grid {
-    display: grid; grid-template-columns: 1fr 1fr;
-    gap: 10px; width: 100%; margin-bottom: 20px;
+    display:grid; grid-template-columns:1fr 1fr;
+    gap:9px; width:100%; margin-bottom:20px;
   }
-
   .tb {
-    background: linear-gradient(145deg, #f5fdf7, #eaf7ee);
-    border: 1.5px solid #c0e8cc;
-    border-radius: 16px; padding: 12px 14px;
+    background:var(--sage);
+    border:1.5px solid rgba(26,74,46,0.12);
+    border-radius:14px; padding:11px 13px;
   }
   .tb-head {
-    display: flex; align-items: center; gap: 6px;
-    margin-bottom: 8px; padding-bottom: 7px;
-    border-bottom: 1.5px solid #d4f0db;
+    display:flex; align-items:center; gap:6px;
+    margin-bottom:8px; padding-bottom:7px;
+    border-bottom:1px solid rgba(26,74,46,0.1);
   }
-  .tb-icon  { font-size: 16px; }
-  .tb-title { font-size: 10.5px; font-weight: 800; color: #1a5235; letter-spacing: 0.5px; text-transform: uppercase; }
+  .tb-icon  { font-size:14px; }
+  .tb-title { font-size:9.5px; font-weight:800; color:var(--forest); letter-spacing:.8px; text-transform:uppercase; }
   .best-badge {
-    margin-left: auto;
-    background: #ffd166; color: #7a4800;
-    font-size: 9px; font-weight: 800;
-    border-radius: 6px; padding: 2px 7px;
+    margin-left:auto;
+    background:var(--gold); color:var(--cream);
+    font-size:8.5px; font-weight:800;
+    border-radius:5px; padding:2px 6px; letter-spacing:.3px;
   }
-  .tb-row { display: flex; align-items: center; gap: 7px; margin-bottom: 5px; }
+  .tb-row { display:flex; align-items:center; gap:7px; margin-bottom:5px; }
   .badge {
-    color: #fff; font-size: 10px; font-weight: 800;
-    border-radius: 6px; padding: 2px 8px;
-    flex-shrink: 0; min-width: 28px; text-align: center;
+    color:var(--cream); font-size:9.5px; font-weight:800;
+    border-radius:5px; padding:2px 7px;
+    flex-shrink:0; min-width:26px; text-align:center;
+    background: var(--forest);
   }
-  .badge.bus  { background: #e07a14; }
-  .badge.tram { background: #1a5235; }
-  .tb-desc { font-size: 11px; color: #3d7050; font-weight: 600; line-height: 1.4; }
-  .tb-walk { font-size: 10px; color: #888; font-weight: 600; margin-top: 4px; }
+  .badge.alt { background:var(--forest2); }
+  .tb-desc { font-size:10.5px; color:var(--forest); font-weight:600; line-height:1.4; opacity:.8; }
+  .tb-walk { font-size:9.5px; color:var(--muted); font-weight:600; margin-top:4px; }
 
   /* ── BUTTONS ── */
   .btn {
-    display: block; width: 100%;
-    color: #fff !important; text-decoration: none !important;
-    border-radius: 22px; padding: 17px 24px;
-    text-align: center; margin-bottom: 12px;
-    position: relative; overflow: hidden;
-    transition: transform 0.18s ease, box-shadow 0.18s ease;
+    display:block; width:100%;
+    color:var(--cream) !important; text-decoration:none !important;
+    border-radius:20px; padding:16px 22px;
+    text-align:center; margin-bottom:10px;
+    position:relative; overflow:hidden;
+    transition:transform .18s ease, box-shadow .18s ease;
+    background: var(--forest);
+    border: 1.5px solid rgba(201,168,76,0.3);
   }
-  .btn:active { transform: scale(0.97); }
+  .btn:last-child { margin-bottom:0; }
+  .btn:active { transform:scale(.97); }
+
+  /* shimmer on buttons */
   .btn::after {
-    content: '';
-    position: absolute; inset: 0;
-    background: linear-gradient(110deg, transparent 38%, rgba(255,255,255,0.1) 50%, transparent 62%);
-    animation: sweep 2.8s ease-in-out infinite;
+    content:'';
+    position:absolute; inset:0;
+    background:linear-gradient(110deg, transparent 38%, rgba(201,168,76,0.1) 50%, transparent 62%);
+    animation:sweep 3s ease-in-out infinite;
   }
 
-  .btn-maps {
-    background: linear-gradient(135deg, #1565c0 0%, #1e7ee6 100%);
-    box-shadow: 0 8px 26px rgba(21,101,192,0.28);
-  }
-  .btn-maps:hover { transform: translateY(-2px); box-shadow: 0 12px 34px rgba(21,101,192,0.38); }
+  .btn:hover { transform:translateY(-2px); box-shadow:0 10px 30px rgba(26,74,46,0.3); }
 
+  /* gold outline variant for calendar */
   .btn-cal {
-    background: linear-gradient(135deg, #1a5235 0%, #2e8b57 100%);
-    box-shadow: 0 8px 26px rgba(26,82,53,0.28);
-    margin-bottom: 0;
+    background:transparent;
+    border:1.5px solid var(--gold);
+    color:var(--forest) !important;
+    margin-bottom:0;
   }
-  .btn-cal:hover { transform: translateY(-2px); box-shadow: 0 12px 34px rgba(26,82,53,0.38); }
+  .btn-cal:hover { background:rgba(201,168,76,0.08); }
+  .btn-cal .btn-title { color:var(--forest); }
+  .btn-cal .btn-sub   { color:var(--muted); }
 
-  .btn-title { font-family: 'Baloo 2', cursive; font-size: 17px; font-weight: 800; color: #fff; margin-bottom: 2px; position: relative; }
-  .btn-sub   { font-size: 11px; font-weight: 600; position: relative; }
-  .btn-maps .btn-sub { color: #bbdefb; }
-  .btn-cal  .btn-sub { color: #a0d8b8; }
+  .btn-title { font-family:'Playfair Display',serif; font-size:15.5px; font-weight:700; color:var(--cream); margin-bottom:2px; position:relative; }
+  .btn-sub   { font-size:10.5px; font-weight:600; color:rgba(250,247,240,.7); position:relative; }
 
   /* ── FOOTER ── */
   .footer {
-    background: linear-gradient(148deg, #2e8b57, #1a5235);
-    padding: 20px 32px; text-align: center;
-    position: relative; overflow: hidden;
+    background:var(--forest);
+    padding:20px 30px; text-align:center;
+    position:relative; overflow:hidden;
   }
+  /* gold line on top */
   .footer::before {
-    content: '🐨  🌿  🐨  🌿  🐨  🌿  🐨';
-    position: absolute; top: 6px; left: 50%;
-    transform: translateX(-50%);
-    white-space: nowrap; font-size: 11px;
-    opacity: 0.15; letter-spacing: 5px;
+    content:'';
+    position:absolute; top:0; left:0; right:0; height:1.5px;
+    background:linear-gradient(90deg, transparent, var(--gold), transparent);
   }
-  .footer-main { font-family: 'Baloo 2', cursive; font-size: 17px; font-weight: 700; color: #fff; margin-top: 4px; }
-  .footer-sub  { font-size: 11.5px; color: #9ed4b4; font-weight: 600; margin-top: 2px; }
+  .footer-main { font-family:'Playfair Display',serif; font-size:16px; font-weight:700; color:var(--cream); margin-top:4px; }
+  .footer-sub  { font-size:11px; color:rgba(232,242,235,0.6); font-weight:600; margin-top:3px; }
+  .footer-paw  {
+    font-size:11px; letter-spacing:6px; opacity:.2;
+    margin-bottom:6px; display:block;
+  }
+
 </style>
 </head>
 <body>
 
-<!-- Confetti -->
+<div class="balloon-wrap" id="balloons"></div>
 <div class="confetti-wrap" id="conf"></div>
 
 <div class="card">
@@ -301,24 +416,29 @@
   <!-- HEADER -->
   <div class="header">
     <div class="dots"></div>
-    <span class="lf lf1">🌿</span>
-    <span class="lf lf2">🍃</span>
-    <span class="lf lf3">🌿</span>
-    <span class="lf lf4">🍃</span>
-    <span class="lf lf5">🌿</span>
-    <div class="invited-tag">🎉 You're Invited! 🎉</div>
+    <div class="shimmer"></div>
+    <span class="lf lf1">🌿</span><span class="lf lf2">🌿</span><span class="lf lf3">🌿</span>
+    <span class="lf lf4">🌿</span><span class="lf lf5">🌿</span>
+
+    <div class="invited-tag">✦ You're Invited ✦</div>
+
     <div class="big-one">
       <span class="num">1</span><span class="sup">st</span>
-      <span class="bday">&nbsp;Birthday!</span>
+      <span class="bday">&nbsp;Birthday</span>
     </div>
-    <div class="koala-badge">🐨</div>
+
+    <div class="koala-wrap">
+      <div class="koala-badge">🐨</div>
+      <span class="koala-paw">🐾</span>
+    </div>
     <div class="curve"></div>
   </div>
 
   <!-- BODY -->
   <div class="body">
+
     <div class="name">Aashvik Manoj</div>
-    <div class="tagline">🐾 Our Little Koala Turns One 🐾</div>
+    <div class="tagline">Our Little Koala Turns One</div>
 
     <div class="divider">
       <div class="div-line"></div>
@@ -328,80 +448,46 @@
 
     <p class="invite-msg">
       Join us as our little koala takes his<br>
-      <strong>first trip around the sun! 🌞</strong><br>
-      It's going to be a wild & wonderful evening!
+      <strong>first trip around the sun 🌞</strong><br>
+      A wild & wonderful evening awaits!
     </p>
+
+    <!-- 🎂 Cake -->
+    <div class="cake-wrap">
+      <div class="cake-emoji">🎂</div>
+      <span class="candle-flame">🔥</span>
+    </div>
 
     <!-- Details -->
     <div class="details">
-      <div class="db">
-        <div class="di">🎂</div>
-        <div class="dl">Birthday</div>
-        <div class="dv">16th April 2026</div>
-      </div>
-      <div class="db">
-        <div class="di">📅</div>
-        <div class="dl">Celebration</div>
-        <div class="dv">18th April 2026</div>
-        <div class="ds">Saturday</div>
-      </div>
-      <div class="db">
-        <div class="di">⏰</div>
-        <div class="dl">Time</div>
-        <div class="dv">5:30 – 8:30 PM</div>
-      </div>
-      <div class="db wide">
-        <div class="di">📍</div>
-        <div class="dl">Venue</div>
-        <div class="dv">Bertha-Benz-Karree 161, 51107 Köln</div>
-      </div>
+      <div class="db"><div class="di">🎂</div><div class="dl">Birthday</div><div class="dv">16th April 2026</div></div>
+      <div class="db"><div class="di">📅</div><div class="dl">Celebration</div><div class="dv">18th April 2026</div><div class="ds">Saturday</div></div>
+      <div class="db"><div class="di">⏰</div><div class="dl">Time</div><div class="dv">5:30 – 8:30 PM</div></div>
+      <div class="db wide"><div class="di">📍</div><div class="dl">Venue</div><div class="dv">Bertha-Benz-Karree 161, 51107 Köln</div></div>
     </div>
+
+    <div class="gold-rule"></div>
 
     <!-- Transport -->
     <div class="section-title">🚍 How to Reach Us</div>
     <div class="transport-grid">
       <div class="tb">
-        <div class="tb-head">
-          <span class="tb-icon">🚌</span>
-          <span class="tb-title">Bus</span>
-          <span class="best-badge">⭐ Closest</span>
-        </div>
-        <div class="tb-row">
-          <span class="badge bus">152</span>
-          <span class="tb-desc">Hans-Offermann-Str.</span>
-        </div>
-        <div class="tb-row">
-          <span class="badge bus">154</span>
-          <span class="tb-desc">Hans-Offermann-Str.</span>
-        </div>
-        <div class="tb-row">
-          <span class="badge bus">191</span>
-          <span class="tb-desc">Bertha-Benz-Karree</span>
-        </div>
+        <div class="tb-head"><span class="tb-icon">🚌</span><span class="tb-title">Bus</span><span class="best-badge">⭐ Closest</span></div>
+        <div class="tb-row"><span class="badge">152</span><span class="tb-desc">Hans-Offermann-Str.</span></div>
+        <div class="tb-row"><span class="badge">154</span><span class="tb-desc">Hans-Offermann-Str.</span></div>
+        <div class="tb-row"><span class="badge">191</span><span class="tb-desc">Bertha-Benz-Karree</span></div>
         <div class="tb-walk">🚶 ~5–10 min walk to venue</div>
       </div>
       <div class="tb">
-        <div class="tb-head">
-          <span class="tb-icon">🚋</span>
-          <span class="tb-title">Light Rail</span>
-        </div>
-        <div class="tb-row">
-          <span class="badge tram">9</span>
-          <span class="tb-desc">→ Köln Ostheim</span>
-        </div>
-        <div class="tb-row">
-          <span class="badge tram">1</span>
-          <span class="tb-desc">→ Köln Ostheim</span>
-        </div>
+        <div class="tb-head"><span class="tb-icon">🚋</span><span class="tb-title">Light Rail</span></div>
+        <div class="tb-row"><span class="badge alt">9</span><span class="tb-desc">→ Köln Ostheim</span></div>
+        <div class="tb-row"><span class="badge alt">1</span><span class="tb-desc">→ Köln Ostheim</span></div>
         <div class="tb-walk">🚶 ~9–10 min walk from Ostheim</div>
       </div>
-      <div class="tb" style="grid-column: 1 / -1;">
-        <div class="tb-head">
-          <span class="tb-icon">🅿️</span>
-          <span class="tb-title">Parking</span>
-        </div>
+      <div class="tb" style="grid-column:1/-1">
+        <div class="tb-head"><span class="tb-icon">🅿️</span><span class="tb-title">Parking</span></div>
         <div class="tb-row"><span class="tb-desc">🚗 Street parking on Bertha-Benz-Str.</span></div>
-        <div class="tb-row"><span class="tb-desc">🏪 Nearby supermarket lots (usually free in evenings)</span></div>
+        <div class="tb-row"><span class="tb-desc">🏪 Nearby supermarket lots (usually free evenings)</span></div>
       </div>
     </div>
 
@@ -410,38 +496,41 @@
       <div class="btn-title">📍 Open in Google Maps</div>
       <div class="btn-sub">Bertha-Benz-Karree 161, 51107 Köln</div>
     </a>
-
-    <a class="btn btn-cal" href="https://calendar.google.com/calendar/render?action=TEMPLATE&text=🐨+Aashvik%27s+1st+Birthday+Party&dates=20260418T153000Z/20260418T183000Z&details=Join+us+to+celebrate+Aashvik+Manoj%27s+1st+Birthday!+🎂🐨%0AAddress:+Bertha-Benz-Karree+161,+51107+Köln&location=Bertha-Benz-Karree+161,+51107+Köln&reminderlen=60" target="_blank">
+    <a class="btn btn-cal" href="https://calendar.google.com/calendar/render?action=TEMPLATE&text=🐨+Aashvik%27s+1st+Birthday+Party&dates=20260418T153000Z/20260418T183000Z&details=Aashvik+Manoj%27s+1st+Birthday!+🎂%0AAddress:+Bertha-Benz-Karree+161,+51107+Köln&location=Bertha-Benz-Karree+161,+51107+Köln&reminderlen=60" target="_blank">
       <div class="btn-title">🗓️ Add to Calendar</div>
       <div class="btn-sub">Saturday 18 Apr · 5:30–8:30 PM · ⏰ 1-hour reminder</div>
     </a>
+
   </div>
 
   <!-- FOOTER -->
   <div class="footer">
-    <div class="footer-main">🐨 Koala Cuddles & Birthday Love! 🎂</div>
-    <div class="footer-sub">With lots of love — Manoj and Preethi 💚</div>
+    <span class="footer-paw">🐾 · 🌿 · 🐾 · 🌿 · 🐾</span>
+    <div class="footer-main">Koala Cuddles & Birthday Love 🎂</div>
+    <div class="footer-sub">With lots of love — Manoj and Preethi</div>
   </div>
 
 </div>
 
 <script>
-  // Confetti
-  const colors = ['#ffd166','#2e8b57','#ff6b6b','#a8d8ea','#f8b4c8','#b2dfb4','#fff'];
-  const wrap = document.getElementById('conf');
-  for (let i = 0; i < 40; i++) {
-    const el = document.createElement('div');
-    el.className = 'cp';
-    el.style.cssText = `
-      left:${Math.random()*100}vw;
-      width:${Math.random()*8+5}px;
-      height:${Math.random()*8+5}px;
-      background:${colors[Math.floor(Math.random()*colors.length)]};
-      border-radius:${Math.random()>.5?'50%':'3px'};
-      animation-duration:${Math.random()*4+4}s;
-      animation-delay:${Math.random()*8}s;
-    `;
-    wrap.appendChild(el);
+  // 🎊 Confetti — forest palette only
+  const cc = ['#1a4a2e','#c9a84c','#e8f2eb','#255c3a','#f0dfa0'];
+  const cw = document.getElementById('conf');
+  for(let i=0;i<35;i++){
+    const e=document.createElement('div'); e.className='cp';
+    e.style.cssText=`left:${Math.random()*100}vw;width:${Math.random()*7+4}px;height:${Math.random()*7+4}px;background:${cc[Math.floor(Math.random()*cc.length)]};border-radius:${Math.random()>.5?'50%':'2px'};animation-duration:${Math.random()*5+5}s;animation-delay:${Math.random()*9}s;opacity:.7;`;
+    cw.appendChild(e);
+  }
+
+  // 🎈 Balloons — only cream & gold tones
+  const bw = document.getElementById('balloons');
+  const bemojis = ['🎈','🎀','🎈','🎈','🎀'];
+  for(let i=0;i<8;i++){
+    const e=document.createElement('div'); e.className='balloon';
+    e.textContent=bemojis[Math.floor(Math.random()*bemojis.length)];
+    // tint balloons to match theme via filter
+    e.style.cssText=`left:${Math.random()*94}vw;font-size:${Math.random()*14+20}px;animation-duration:${Math.random()*7+11}s;animation-delay:${Math.random()*13}s;filter:sepia(.4) hue-rotate(60deg) saturate(.7);`;
+    bw.appendChild(e);
   }
 </script>
 </body>
