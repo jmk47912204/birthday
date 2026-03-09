@@ -408,6 +408,7 @@
 </head>
 <body>
 
+<div id="music-prompt" onclick="startMusic()" style="position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(16px);background:#1a4a2e;color:#faf7f0;border:1.5px solid #c9a84c;border-radius:40px;padding:11px 24px;font-family:'Quicksand',sans-serif;font-size:13px;font-weight:700;letter-spacing:.5px;box-shadow:0 8px 24px rgba(26,74,46,0.32);cursor:pointer;z-index:100;opacity:0;transition:opacity .4s ease,transform .4s ease;display:flex;align-items:center;gap:9px;">🎸 Tap for Happy Birthday music</div>
 <div class="balloon-wrap" id="balloons"></div>
 <div class="confetti-wrap" id="conf"></div>
 
@@ -528,10 +529,170 @@
   for(let i=0;i<8;i++){
     const e=document.createElement('div'); e.className='balloon';
     e.textContent=bemojis[Math.floor(Math.random()*bemojis.length)];
-    // tint balloons to match theme via filter
     e.style.cssText=`left:${Math.random()*94}vw;font-size:${Math.random()*14+20}px;animation-duration:${Math.random()*7+11}s;animation-delay:${Math.random()*13}s;filter:sepia(.4) hue-rotate(60deg) saturate(.7);`;
     bw.appendChild(e);
   }
+
+  // ══════════════════════════════════════════════════
+  // 🎸 XYLOPHONE HAPPY BIRTHDAY — Looping forever
+  // Bright, woody, bouncy marimba/xylophone tone
+  // Each note: sharp transient + warm resonant body
+  // + gentle pitched noise layer = real xylophone feel
+  // ══════════════════════════════════════════════════
+
+  const BPM  = 148;               // upbeat but not rushed
+  const BEAT = 60 / BPM;
+
+  const N = {
+    G4:392.00, A4:440.00, B4:493.88,
+    C5:523.25, D5:587.33, E5:659.25,
+    F5:698.46, G5:783.99
+  };
+
+  // Happy Birthday — [note, beats]
+  const MELODY = [
+    ['G4',.75],['G4',.25],['A4',1],['G4',1],['C5',1],['B4',2.0],
+    ['G4',.75],['G4',.25],['A4',1],['G4',1],['D5',1],['C5',2.0],
+    ['G4',.75],['G4',.25],['G5',1],['E5',1],['C5',1],['B4',1],['A4',2.0],
+    ['F5',.75],['F5',.25],['E5',1],['C5',1],['D5',1],['C5',3.2],
+  ];
+
+  const LOOP_DUR = MELODY.reduce((s,[,b]) => s + b * BEAT + 0.012, 0.08);
+
+  let audioCtx   = null;
+  let masterOut  = null;
+  let loopTimer  = null;
+  let isPlaying  = false;
+
+  // ── Single xylophone bar strike ──
+  function xyloStrike(freq, startT) {
+    if (!freq) return;
+
+    // 1) Main bar tone — sine, fast attack, exponential decay (bar resonance)
+    const bar     = audioCtx.createOscillator();
+    const barGain = audioCtx.createGain();
+    bar.type = 'sine';
+    bar.frequency.value = freq;
+    barGain.gain.setValueAtTime(0,      startT);
+    barGain.gain.linearRampToValueAtTime(0.7,  startT + 0.006);  // crisp strike
+    barGain.gain.exponentialRampToValueAtTime(0.0001, startT + 0.55); // woody decay
+    bar.connect(barGain); barGain.connect(masterOut);
+    bar.start(startT); bar.stop(startT + 0.6);
+
+    // 2) Bright click transient — high sine burst, very short (mallet hit)
+    const click     = audioCtx.createOscillator();
+    const clickGain = audioCtx.createGain();
+    click.type = 'triangle';
+    click.frequency.value = freq * 3.1; // inharmonic upper partial = woody click
+    clickGain.gain.setValueAtTime(0,     startT);
+    clickGain.gain.linearRampToValueAtTime(0.35, startT + 0.003);
+    clickGain.gain.exponentialRampToValueAtTime(0.0001, startT + 0.07);
+    click.connect(clickGain); clickGain.connect(masterOut);
+    click.start(startT); click.stop(startT + 0.08);
+
+    // 3) Warm 2nd harmonic — adds body & sustain like a real bar
+    const harm     = audioCtx.createOscillator();
+    const harmGain = audioCtx.createGain();
+    harm.type = 'sine';
+    harm.frequency.value = freq * 2.756; // slightly inharmonic = xylophone character
+    harmGain.gain.setValueAtTime(0,     startT);
+    harmGain.gain.linearRampToValueAtTime(0.18, startT + 0.006);
+    harmGain.gain.exponentialRampToValueAtTime(0.0001, startT + 0.22);
+    harm.connect(harmGain); harmGain.connect(masterOut);
+    harm.start(startT); harm.stop(startT + 0.25);
+
+    // 4) Pitched noise burst — gives the airy "wood" texture
+    const bufSize = audioCtx.sampleRate * 0.04;
+    const buf     = audioCtx.createBuffer(1, bufSize, audioCtx.sampleRate);
+    const data    = buf.getChannelData(0);
+    for (let i = 0; i < bufSize; i++) data[i] = (Math.random() * 2 - 1);
+    const noise     = audioCtx.createBufferSource();
+    const bpf       = audioCtx.createBiquadFilter();
+    const noiseGain = audioCtx.createGain();
+    noise.buffer = buf;
+    bpf.type = 'bandpass';
+    bpf.frequency.value = freq * 1.5;
+    bpf.Q.value = 4;
+    noiseGain.gain.setValueAtTime(0,     startT);
+    noiseGain.gain.linearRampToValueAtTime(0.12, startT + 0.004);
+    noiseGain.gain.exponentialRampToValueAtTime(0.0001, startT + 0.05);
+    noise.connect(bpf); bpf.connect(noiseGain); noiseGain.connect(masterOut);
+    noise.start(startT); noise.stop(startT + 0.06);
+  }
+
+  // ── Schedule one full pass of the melody ──
+  function scheduleLoop(startT) {
+    let t = startT;
+    MELODY.forEach(([note, beats]) => {
+      xyloStrike(N[note], t);
+      t += beats * BEAT + 0.012;
+    });
+    return t;
+  }
+
+  // ── Kick off the looping engine ──
+  function startMusic() {
+    if (isPlaying) return;
+    isPlaying = true;
+    hideMusicPrompt();
+
+    audioCtx  = new (window.AudioContext || window.webkitAudioContext)();
+    masterOut = audioCtx.createGain();
+    masterOut.gain.setValueAtTime(0, audioCtx.currentTime);
+    masterOut.gain.linearRampToValueAtTime(0.82, audioCtx.currentTime + 0.25);
+
+    // Light room echo — adds bounce without muddiness
+    const echo  = audioCtx.createDelay(0.16);
+    const eGain = audioCtx.createGain();
+    echo.delayTime.value = 0.16;
+    eGain.gain.value     = 0.15;
+    masterOut.connect(echo);
+    echo.connect(eGain);
+    eGain.connect(masterOut);
+    masterOut.connect(audioCtx.destination);
+
+    // Schedule first two loops right away so start is seamless
+    let cursor = audioCtx.currentTime + 0.06;
+    cursor = scheduleLoop(cursor);
+    cursor = scheduleLoop(cursor);
+
+    // Keep scheduling one loop ahead on a rolling timer
+    function roll() {
+      if (!isPlaying) return;
+      scheduleLoop(audioCtx.currentTime + LOOP_DUR * 0.6);
+      loopTimer = setTimeout(roll, LOOP_DUR * 900);
+    }
+    loopTimer = setTimeout(roll, LOOP_DUR * 900);
+  }
+
+  // ── Music prompt helpers ──
+  function hideMusicPrompt() {
+    const p = document.getElementById('music-prompt');
+    if (p) { p.style.opacity='0'; setTimeout(()=>{ p.style.display='none'; }, 420); }
+  }
+  function showMusicPrompt() {
+    const p = document.getElementById('music-prompt');
+    if (p) { p.style.display='flex'; requestAnimationFrame(()=>{ p.style.opacity='1'; p.style.transform='translateY(0)'; }); }
+  }
+
+  // ── Autoplay on load; fallback to first-tap ──
+  window.addEventListener('load', () => {
+    setTimeout(() => {
+      try {
+        const probe = new (window.AudioContext || window.webkitAudioContext)();
+        if (probe.state === 'running') {
+          probe.close().then(startMusic);
+        } else {
+          probe.close();
+          showMusicPrompt();
+        }
+      } catch(e) { showMusicPrompt(); }
+    }, 600);
+  });
+
+  function onFirstTap() { if (!isPlaying) startMusic(); }
+  document.addEventListener('touchstart', onFirstTap, { once: true });
+  document.addEventListener('click',      onFirstTap, { once: true });
 </script>
 </body>
 </html>
